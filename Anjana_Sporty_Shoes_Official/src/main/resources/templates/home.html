@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en"></html>
+  	<head>
+	    <!-- Required meta tags -->
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	    <!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		
+		<title>Home | Products</title>
+		<style>
+			#prod_btn {
+				color: black;
+				font-family: 'Courier New', Courier, monospace;
+				font-weight: 1000;
+			}
+			footer {
+				position: fixed;
+				left: 0;
+			    bottom: 0;
+			    width: 100%;
+			    color: #fff;
+			    text-align: right;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- NAVBAR -->
+		<nav class="navbar navbar-expand-lg navbar-dark bg-info">
+			<a class="navbar-brand" href="/home">Sporty Shoes Official</a>
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active"><a href="/home"><button class="btn btn-info">Home</button></a></li>
+				<li class="nav-item active"><a href="/listUsersPage"><button class="btn btn-info">List of Users</button></a></li>
+				<li class="nav-item active"><a href="/addProductPage"><button class="btn btn-info">Add Product</button></a></li>
+				<li class="nav-item active"><a href="/addCategoryPage"><button class="btn btn-info">Add Category</button></a></li>
+				<li class="nav-item active"><a href="/myCart"><button class="btn btn-info">Cart</button></a></li>
+				<li class="nav-item active"><a href="/checkoutDetails"><button class="btn btn-warning">Purchase Report</button></a></li>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item active"><h4><span th:text="${session.username}"></span></h4></li>&nbsp;&nbsp;&nbsp;&nbsp;
+				<li class="nav-item active"><a href="/logout"><button class="btn btn-danger">LogOut</button></a></li>
+			</ul>
+		</nav>
+		<!-- NAVBAR -->
+	  
+	  	<div style="text-align: center;">
+			<h1 class="mt-5">
+				Welcome, <span th:text="${session.username}"></span>
+			</h1>
+			<h2>All Products</h2>
+		</div>
+		
+			
+	  	
+	  
+	  	<div class="container p-6">
+			  
+			  <!-- FILTERS -->
+			  <div class="bg-light">
+				  <form action="/product/filter" method="GET">
+					  <label for="category">Filter by Category:</label>
+					  <select name="category" id="category">
+					    <option value="0">All</option>
+					    <option th:each="category : ${listCat}" th:value="${category.category_id}" th:text="${category.category_name}"></option>
+					  </select>
+					  <button type="submit">Filter</button>
+				  </form>
+		  	  </div>
+			  <!-- FILTERS -->
+			  
+			  <!-- MESSAGE -->
+			  <div th:if="${session.msg}">
+				<div class="alert alert-success" role="alert" th:text="${session.msg}"></div>
+				<th:block th:text="${@sessionHelper.removeMessagefromSession()}"></th:block>
+	  		  </div>
+	  		  <!-- MESSAGE -->
+	  	
+			<table class="table table-striped table-light" style="text-align: center;">
+				<thead class="bg-warning" style="text-align: center;">
+					<tr>
+						<th scope="col">ID</th>
+						<th scope="col">Image</th>
+						<th scope="col">Name</th>
+						<th scope="col">Description</th>
+						<th scope="col">Category</th>
+						<th scope="col">Price</th>
+						<th scope="col" colspan="3">Action</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="prod: ${listProductWithCategory}">
+						<td th:text="${prod[1]}">@mdo</td><!--ID-->
+						<td>
+							<image alt="" th:src="*{'data:image/jpeg;base64,'+{prod[0]}}" style="width:150px; height:150px;"></image>
+						</td>							  <!--Image-->
+						<td th:text="${prod[2]}">Mark</td><!--Name-->
+						<td th:text="${prod[3]}">Otto</td><!--Description-->
+						<td th:text="${prod[4]}">@mdo</td><!--Category-->
+						<td th:text="${prod[5]}">@mdo</td><!--Price-->
+						<td>							  <!--Action-->
+							<a id="prod_btn" class="btn btn-sm btn-info" th:href="@{/product/editProductInfoPage/{id}(id=${prod[1]})}">Edit</a>
+						</td>
+						<td>
+							<a id="prod_btn" class="btn btn-sm btn-danger" th:href="@{/product/deleteProd/{id}(id=${prod[1]})}">Delete</a>
+						</td>
+						<td>
+							<a id="prod_btn" class="btn btn-sm btn-success" th:href="@{/cart/myCartPage/{id}(id=${prod[1]})}">Add to Cart</a>
+						</td>
+
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- FOOTER -->
+		<footer class="container-fluid bg-info active">
+			<div>
+				Sporty Shoes Official By Anjana Kizhiyapat &#169; 2023
+			</div>
+		</footer>
+		<!-- FOOTER -->
+	</body>
+</html>
